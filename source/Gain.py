@@ -1,7 +1,29 @@
 import pandas as pd
 import math
 
-def get_gain(dataframe, label, feature):
+def get_probability(dataframe: pd.DataFrame, feature):
+    p_ret = dict()
+    items = pd.unique(dataframe[feature])
+    n_total = dataframe[feature].count()
+    for item in items:
+        ni = dataframe[feature].loc[dataframe[feature] == item].count()
+        pi = ni/n_total
+        p_ret[item] = pi
+    return p_ret
+
+def get_entropy(dataframe: pd.DataFrame, feature):
+    # Get all values in the label 
+    items = pd.unique(dataframe[feature])
+    n_total = dataframe[feature].count()
+    entropy = 0
+    # Get p for all values possible --> Entropy_s
+    for item in items:
+        n_i = dataframe[feature].loc[dataframe[feature] == item].count()
+        pi = n_i/n_total
+        entropy -= pi*math.log2(pi)
+    return entropy
+
+def get_gain(dataframe: pd.DataFrame, label, feature):
     # Get all values in the label 
     items = pd.unique(dataframe[label])
     n_total = dataframe[label].count()
@@ -35,4 +57,4 @@ def get_gain(dataframe, label, feature):
     gain = entropy_s - entropy_feature
     return gain
 
-__all__ = ['get_gain']
+__all__ = ['get_gain', 'get_probability', 'get_entropy']
