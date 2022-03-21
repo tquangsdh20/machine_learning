@@ -1,0 +1,15 @@
+age	income	student	credit-rating	buys-computer
+24	high	no	fair	no
+25	high	no	excellent	no
+32	high	no	fair	yes
+43	medium	no	fair	yes
+44	low	yes	fair	yes
+47	low	yes	excellent	no
+35	low	yes	excellent	yes
+21	medium	no	fair	no
+28	low	yes	fair	yes
+44	medium	yes	fair	yes
+26	medium	yes	excellent	yes
+36	medium	no	excellent	yes
+39	high	yes	fair	yes
+48	medium	no	excellent	no

@@ -1,3 +1,4 @@
+from typing import Dict
 import pandas as pd
 import math
 
@@ -57,4 +58,33 @@ def get_gain(dataframe: pd.DataFrame, label, feature):
     gain = entropy_s - entropy_feature
     return gain
 
-__all__ = ['get_gain', 'get_probability', 'get_entropy']
+def get_fmax(dat: pd.DataFrame, label: str):
+    features = dat.drop(label, axis=1).keys()
+    fmax = features[0]
+    gmax = get_gain(dat, label, fmax)
+    for fi in features:
+        gi = get_gain(dat, label, fi)
+        if gmax < gi: gmax, fmax = gi, fi
+    return fmax
+
+def build_decision_tree(dat: pd.DataFrame, label: str):
+    decisiontree: Dict = dict()
+    decision: Dict = dict()
+    fmax = get_fmax(dat, label)
+    subvalues = pd.unique(dat[fmax])
+    # All items searching
+    for item in subvalues:
+        # print(f'The sub-table with {fmax} = {item}')
+        subdummy = dat.loc[dat[fmax] == item]
+        # print(subdummy)
+        entropy_sub = get_entropy(subdummy, label)
+        if entropy_sub == 0:
+            decision[item] = pd.unique(subdummy[label])[0]
+        else:
+            # print('Processing subtree')
+            decision[item] = build_decision_tree(subdummy.drop(fmax, axis=1), label)
+        # print(f'Entropy = {entropy_sub}\n')
+        decisiontree[fmax] = decision
+    return decisiontree
+
+__all__ = ['get_gain', 'get_probability', 'get_entropy', 'build_decision_tree']
